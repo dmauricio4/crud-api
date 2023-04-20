@@ -1,9 +1,15 @@
 package ec.edu.ups.crudapi.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //se incrementa automaticamente el id en la BD
     private long id;
     private String name;
     private float price;
