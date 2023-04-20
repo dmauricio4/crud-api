@@ -11,7 +11,4 @@ public class CrudApiApplication {
 		SpringApplication.run(CrudApiApplication.class, args);
 	}
 
-
-
-
 }
