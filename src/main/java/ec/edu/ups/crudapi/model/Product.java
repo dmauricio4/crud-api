@@ -12,6 +12,8 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //se incrementa automaticamente el id en la BD
     private long id;
+
+    @Column(unique = true)
     private String name;
     private float price;
     private LocalDate date;
