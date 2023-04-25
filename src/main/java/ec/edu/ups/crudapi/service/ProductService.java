@@ -1,8 +1,11 @@
 package ec.edu.ups.crudapi.service;
 
+import com.fasterxml.jackson.annotation.Nulls;
 import ec.edu.ups.crudapi.interfaces.ProductRepository;
 import ec.edu.ups.crudapi.model.Product;
+import org.hibernate.type.NullType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.support.NullValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,22 +32,31 @@ public class ProductService {
     }
 
     public ResponseEntity<Object> newProduct(Product product) {
-         Optional<Product> res = productRepository.findProductByName(product.getName());
-
+        Optional<Product> res = productRepository.findProductByName(product.getName());
         HashMap<String, Object> datos = new HashMap<>();
+        //&& Long.valueOf( product.getId()) == null
 
-         if (res.isPresent()){
-             datos.put("error", true);
-             datos.put("message", "Ya existe un producto con ese nombre");
-             //Esta respuesta es solo para probar con postman
-             //throw new IllegalStateException("Ya existe el producto");
+        if (res.isPresent() && Long.valueOf(product.getId()) == null) {
+            datos.put("error", true);
+            datos.put("message", "Ya existe un producto con ese nombre");
+            //Esta respuesta es solo para probar con postman
+            //throw new IllegalStateException("Ya existe el producto");
 
-             //Respuesta mejororada, cuando se quiere crear un producto con el mismo nombre
+            //Respuesta mejororada, cuando se quiere crear un producto con el mismo nombre
+
              return new ResponseEntity<>(
-                     datos,
-                     HttpStatus.CONFLICT
-             );
-         }
+                datos,
+                HttpStatus.CONFLICT
+            );
+    }
+        datos.put("message", "Guardado con éxito");
+         //actualizar
+        if (Long.valueOf(product.getId()) != null){
+            datos.put("message", "Actualizado con éxito");
+
+            System.out.println("bloque de código donde pudiera saltar un error es este");
+        }
+
          productRepository.save(product);
          datos.put("datos", product);
          datos.put("message", "Guardado con éxito");
