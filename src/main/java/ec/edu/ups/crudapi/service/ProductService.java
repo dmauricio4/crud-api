@@ -1,17 +1,12 @@
 package ec.edu.ups.crudapi.service;
 
-import com.fasterxml.jackson.annotation.Nulls;
 import ec.edu.ups.crudapi.interfaces.ProductRepository;
 import ec.edu.ups.crudapi.model.Product;
-import org.hibernate.type.NullType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.support.NullValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +31,7 @@ public class ProductService {
         HashMap<String, Object> datos = new HashMap<>();
         //&& Long.valueOf( product.getId()) == null
 
-        if (res.isPresent() && Long.valueOf(product.getId()) == null) {
+        if (res.isPresent() && Long.valueOf(product.getId()) == 0) {
             datos.put("error", true);
             datos.put("message", "Ya existe un producto con ese nombre");
             //Esta respuesta es solo para probar con postman
@@ -51,10 +46,8 @@ public class ProductService {
     }
         datos.put("message", "Guardado con éxito");
          //actualizar
-        if (Long.valueOf(product.getId()) != null){
+        if (Long.valueOf(product.getId()) != 0){
             datos.put("message", "Actualizado con éxito");
-
-            System.out.println("bloque de código donde pudiera saltar un error es este");
         }
 
          productRepository.save(product);
